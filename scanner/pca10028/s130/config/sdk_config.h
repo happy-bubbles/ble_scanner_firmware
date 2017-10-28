@@ -348,7 +348,7 @@
 // <e> CLOCK_ENABLED - nrf_drv_clock - CLOCK peripheral driver
 //==========================================================
 #ifndef CLOCK_ENABLED
-#define CLOCK_ENABLED 1
+#define CLOCK_ENABLED 0
 #endif
 #if  CLOCK_ENABLED
 // <o> CLOCK_CONFIG_XTAL_FREQ  - HF XTAL Frequency
@@ -368,7 +368,7 @@
 // <2=> Synth 
 
 #ifndef CLOCK_CONFIG_LF_SRC
-#define CLOCK_CONFIG_LF_SRC 1
+#define CLOCK_CONFIG_LF_SRC 0
 #endif
 
 // <o> CLOCK_CONFIG_IRQ_PRIORITY  - Interrupt priority

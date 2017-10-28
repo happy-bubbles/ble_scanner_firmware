@@ -82,10 +82,9 @@ void simple_uart_putstring(const uint8_t * str)
 	while (ch != '\0')
 	{
 		app_uart_put(ch);
-		//app_uart_flush();
 		ch = str[i++];
 	}
-	app_uart_flush();
+	//app_uart_flush();
 }
 
 /**@brief Function to start scanning.
@@ -304,23 +303,23 @@ int main(void)
 
     uart_init();
     //buttons_leds_init();
-    ble_stack_init();
+    //ble_stack_init();
 
-		//nrf_gpio_cfg_output(LED1_PIN);
-		//nrf_gpio_pin_clear(LED1_PIN);
+		nrf_gpio_cfg_output(LED1_PIN);
+		nrf_gpio_pin_clear(LED1_PIN);
 
     // Start scanning for peripherals 
     simple_uart_putstring((const uint8_t *)"Uart_c Scan started\r\n\0");
-		scan_start();
+		//scan_start();
 
-		/*
+		
 		while(1)
 		{
 			nrf_gpio_pin_toggle(LED1_PIN);
 			nrf_delay_ms(1000);
-			simple_uart_putstring((const uint8_t *)"Uart_c Scan started\r\n\0");
+			simple_uart_putstring((const uint8_t *)"going now\r\n\0");
 		}
-		*/
+		
     for (;;)
     {
         //power_manage();

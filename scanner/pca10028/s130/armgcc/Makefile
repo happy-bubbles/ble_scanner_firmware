@@ -7,8 +7,8 @@ PROJ_DIR := ../../..
 
 CFLAGS += -DNRF_LOG_ENABLED=0
 ASMFLAGS += -DNRF_LOG_ENABLED=0
-CFLAGS += -DUART_ENABLED=1 -DAPP_UART_ENABLED=1
-ASMFLAGS += -DUART_ENABLED=1 -DAPP_UART_ENABLED=1
+CFLAGS += -DUART_ENABLED=1 -DAPP_UART_FIFO_ENABLED=1
+ASMFLAGS += -DUART_ENABLED=1 -DAPP_UART_FIFO_ENABLED=1
 
 $(OUTPUT_DIRECTORY)/nrf51822_xxac.out: \
   LINKER_SCRIPT  := scanner.ld
@@ -26,7 +26,6 @@ SRC_FILES += \
 	$(SDK_ROOT)/components/libraries/util/sdk_errors.c \
 	$(SDK_ROOT)/components/drivers_nrf/common/nrf_drv_common.c \
 	$(SDK_ROOT)/components/drivers_nrf/uart/nrf_drv_uart.c \
-	$(SDK_ROOT)/components/drivers_nrf/clock/nrf_drv_clock.c \
   $(SDK_ROOT)/components/libraries/util/app_util_platform.c \
   $(SDK_ROOT)/components/libraries/hardfault/hardfault_implementation.c \
   $(SDK_ROOT)/components/libraries/util/nrf_assert.c \
@@ -96,7 +95,6 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/drivers_nrf/usbd \
   $(SDK_ROOT)/components/softdevice/common/softdevice_handler \
 	$(SDK_ROOT)/components/libraries/log/src \
-	$(SDK_ROOT)/components/drivers_nrf/clock \
 	$(SDK_ROOT)/components/libraries/fifo \
 	../config \
   $(PROJ_DIR) \
