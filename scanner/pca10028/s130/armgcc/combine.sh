@@ -1,0 +1,1 @@
+srec_cat /code/happy-bubbles/scanner_chip/nRF5_SDK_12.3.0_d7731ad/components/softdevice/s130/hex/s130_nrf51_2.0.1_softdevice.hex -intel _build/nrf51822_xxac.hex -intel -o combined.hex -intel --line-length=44
