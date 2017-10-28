@@ -28,7 +28,7 @@
 #define APP_TIMER_PRESCALER     0                               /**< Value of the RTC1 PRESCALER register. */
 #define APP_TIMER_OP_QUEUE_SIZE 2                               /**< Size of timer operation queues. */
 
-#define SCAN_INTERVAL           0x00A0                          /**< Determines scan interval in units of 0.625 millisecond. */
+#define SCAN_INTERVAL           0x0050                          /**< Determines scan interval in units of 0.625 millisecond. */
 #define SCAN_WINDOW             0x0050                          /**< Determines scan window in units of 0.625 millisecond. */
 #define SCAN_ACTIVE             1                               /**< If 1, performe active scanning (scan requests). */
 #define SCAN_SELECTIVE          0                               /**< If 1, ignore unknown devices (non whitelisted). */
@@ -153,22 +153,42 @@ void uart_event_handle(app_uart_evt_t * p_event)
  */
 static void send_adv_uart(const ble_gap_evt_adv_report_t *p_adv_report)
 {
-    //uint32_t err_code;
+    uint32_t err_code;
     uint32_t index = 0;
-    //uint8_t *p_data = (uint8_t *)p_adv_report->data;
-    //ble_uuid_t extracted_uuid;
+    uint8_t *p_data = (uint8_t *)p_adv_report->data;
+
+		char msg [500];
+
+		ble_gap_addr_t paddr = p_adv_report->peer_addr;
+		//char addr [100];
+		sprintf(msg, "|%02x%02x%02x%02x%02x%02x|%i|%i|%i|", 
+				paddr.addr[5], 
+				paddr.addr[4], 
+				paddr.addr[3], 
+				paddr.addr[2], 
+				paddr.addr[1], 
+				paddr.addr[0], 
+				
+				p_adv_report->rssi,
+				p_adv_report->scan_rsp,
+				p_adv_report->type);
 
     while (index < p_adv_report->dlen)
     {
+			  char n[3];
+				sprintf(n, "%02x", p_data[index]);
+			  strcat(msg, n);
         //uint8_t field_length = p_data[index];
         //uint8_t field_type   = p_data[index + 1];
-
+				//index += field_length + 1;
+				index++;
 				// TODO: structure the output here and send out over UART
 				//app_uart_put("got a packet\n");
-				simple_uart_putstring((const uint8_t *)"got a packet\n\0");
-
 		}
-    return;
+		strcat(msg, "|\n\r");
+		//simple_uart_putstring((const uint8_t *)"got a packet\n\0");
+		simple_uart_putstring((const uint8_t *)msg);
+    //return;
 }
 
 /**@brief Function for handling the Application's BLE Stack events.
@@ -177,7 +197,7 @@ static void send_adv_uart(const ble_gap_evt_adv_report_t *p_adv_report)
  */
 static void on_ble_evt(ble_evt_t * p_ble_evt)
 {
-    //uint32_t              err_code;
+    uint32_t              err_code;
     const ble_gap_evt_t * p_gap_evt = &p_ble_evt->evt.gap_evt;
 
     switch (p_ble_evt->header.evt_id)
@@ -303,21 +323,20 @@ int main(void)
 
     uart_init();
     //buttons_leds_init();
-    //ble_stack_init();
+    ble_stack_init();
 
 		nrf_gpio_cfg_output(LED1_PIN);
 		nrf_gpio_pin_clear(LED1_PIN);
 
     // Start scanning for peripherals 
     simple_uart_putstring((const uint8_t *)"Uart_c Scan started\r\n\0");
-		//scan_start();
-
+		scan_start();
 		
 		while(1)
 		{
 			nrf_gpio_pin_toggle(LED1_PIN);
 			nrf_delay_ms(1000);
-			simple_uart_putstring((const uint8_t *)"going now\r\n\0");
+			//simple_uart_putstring((const uint8_t *)"going now\r\n\0");
 		}
 		
     for (;;)
