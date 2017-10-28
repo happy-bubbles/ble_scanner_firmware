@@ -1,0 +1,7 @@
+*.hex
+*.out
+*.bin
+*.d
+*.o
+_build/
+venv/
