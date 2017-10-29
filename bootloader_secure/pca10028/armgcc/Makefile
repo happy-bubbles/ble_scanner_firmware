@@ -28,7 +28,7 @@ SRC_FILES += \
   $(SDK_ROOT)/components/drivers_nrf/common/nrf_drv_common.c \
   $(SDK_ROOT)/components/drivers_nrf/rng/nrf_drv_rng.c \
   $(SDK_ROOT)/components/drivers_nrf/hal/nrf_nvmc.c \
-  $(SDK_ROOT)/components/libraries/bootloader/ble_dfu/nrf_ble_dfu.c \
+  $(PROJ_DIR)/libraries/bootloader/ble_dfu/nrf_ble_dfu.c \
   $(PROJ_DIR)/dfu-cc.pb.c \
   $(PROJ_DIR)/dfu_public_key.c \
   $(PROJ_DIR)/dfu_req_handling.c \
@@ -42,15 +42,15 @@ SRC_FILES += \
   $(SDK_ROOT)/components/toolchain/system_nrf51.c \
   $(SDK_ROOT)/components/softdevice/common/softdevice_handler/softdevice_handler.c \
   $(SDK_ROOT)/components/softdevice/common/softdevice_handler/softdevice_handler_appsh.c \
-  $(SDK_ROOT)/components/libraries/bootloader/nrf_bootloader.c \
-  $(SDK_ROOT)/components/libraries/bootloader/nrf_bootloader_app_start.c \
-  $(SDK_ROOT)/components/libraries/bootloader/nrf_bootloader_info.c \
-  $(SDK_ROOT)/components/libraries/bootloader/dfu/nrf_dfu.c \
-  $(SDK_ROOT)/components/libraries/bootloader/dfu/nrf_dfu_flash.c \
-  $(SDK_ROOT)/components/libraries/bootloader/dfu/nrf_dfu_mbr.c \
-  $(SDK_ROOT)/components/libraries/bootloader/dfu/nrf_dfu_settings.c \
-  $(SDK_ROOT)/components/libraries/bootloader/dfu/nrf_dfu_transport.c \
-  $(SDK_ROOT)/components/libraries/bootloader/dfu/nrf_dfu_utils.c \
+  $(PROJ_DIR)/libraries/bootloader/nrf_bootloader.c \
+  $(PROJ_DIR)/libraries/bootloader/nrf_bootloader_app_start.c \
+  $(PROJ_DIR)/libraries/bootloader/nrf_bootloader_info.c \
+  $(PROJ_DIR)/libraries/bootloader/dfu/nrf_dfu.c \
+  $(PROJ_DIR)/libraries/bootloader/dfu/nrf_dfu_flash.c \
+  $(PROJ_DIR)/libraries/bootloader/dfu/nrf_dfu_mbr.c \
+  $(PROJ_DIR)/libraries/bootloader/dfu/nrf_dfu_settings.c \
+  $(PROJ_DIR)/libraries/bootloader/dfu/nrf_dfu_transport.c \
+  $(PROJ_DIR)/libraries/bootloader/dfu/nrf_dfu_utils.c \
 
 # Include folders common to all targets
 INC_FOLDERS += \

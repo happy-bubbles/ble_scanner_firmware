@@ -5,3 +5,6 @@
 *.o
 _build/
 venv/
+app_dfu_package.zip
+*.sh
+tmp
