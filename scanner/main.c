@@ -38,7 +38,9 @@
 #define UUID32_SIZE             4                               /**< Size of 32 bit UUID */
 #define UUID128_SIZE            16                              /**< Size of 128 bit UUID */
 
-#define LED1_PIN 26
+#define SERIAL_ENABLE_PIN 26
+
+static bool SERIAL_STARTED = false;
 
 /**
  * @brief Parameters used when scanning.
@@ -113,7 +115,6 @@ void uart_event_handle(app_uart_evt_t * p_event)
     switch (p_event->evt_type)
     {
 
-        /*
 				case APP_UART_DATA_READY:
             UNUSED_VARIABLE(app_uart_get(&data_array[index]));
             index++;
@@ -122,11 +123,15 @@ void uart_event_handle(app_uart_evt_t * p_event)
             {
 							  //TODO: process the string here
 								// maybe check if it's some command from the nRF, like to put into bootloader mode?
+								
+								if (strncmp(data_array, "STOP\n", strlen("STOP\n")) == 0)
+								{
+									app_uart_close();
+								}
 
                 index = 0;
             }
             break;
-        */
 
 				case APP_UART_COMMUNICATION_ERROR:
             //APP_ERROR_HANDLER(p_event->data.error_communication);
@@ -156,6 +161,11 @@ static void send_adv_uart(const ble_gap_evt_adv_report_t *p_adv_report)
     uint32_t err_code;
     uint32_t index = 0;
     uint8_t *p_data = (uint8_t *)p_adv_report->data;
+		
+		if(!SERIAL_STARTED)
+		{
+			return;
+		}
 
 		char msg [500];
 
@@ -316,25 +326,57 @@ static void power_manage(void)
     APP_ERROR_CHECK(err_code);
 }
 
-
 int main(void)
 {
     APP_TIMER_INIT(APP_TIMER_PRESCALER, APP_TIMER_OP_QUEUE_SIZE, NULL);
 
-    uart_init();
     //buttons_leds_init();
     ble_stack_init();
 
-		nrf_gpio_cfg_output(LED1_PIN);
-		nrf_gpio_pin_clear(LED1_PIN);
+		nrf_gpio_cfg_input(SERIAL_ENABLE_PIN, NRF_GPIO_PIN_NOPULL);
+		
+		nrf_gpio_cfg_input(RX_PIN_NUMBER, NRF_GPIO_PIN_NOPULL);
+		nrf_gpio_cfg_input(TX_PIN_NUMBER, NRF_GPIO_PIN_NOPULL);
 
     // Start scanning for peripherals 
-    simple_uart_putstring((const uint8_t *)"Uart_c Scan started\r\n\0");
 		scan_start();
 		
+		/*
+		uart_init();
+    simple_uart_putstring((const uint8_t *)"Uart_c Scan started\r\n\0");
+		if(nrf_gpio_pin_read(SERIAL_ENABLE_PIN) > 0)
+		{
+    	simple_uart_putstring((const uint8_t *)"PIN ON\r\n\0");
+		}
+		else
+		{
+    	simple_uart_putstring((const uint8_t *)"PIN OFF\r\n\0");
+		}
+		*/
+	
 		while(1)
 		{
-			nrf_gpio_pin_toggle(LED1_PIN);
+			if(nrf_gpio_pin_read(SERIAL_ENABLE_PIN) > 0)
+			{
+				if(SERIAL_STARTED)
+				{
+					app_uart_close();
+					nrf_gpio_cfg_input(RX_PIN_NUMBER, NRF_GPIO_PIN_NOPULL);
+					nrf_gpio_cfg_input(TX_PIN_NUMBER, NRF_GPIO_PIN_NOPULL);
+    			//simple_uart_putstring((const uint8_t *)"closing serial\r\n\0");
+					SERIAL_STARTED = false;
+				}
+			}
+			else
+			{
+				if(!SERIAL_STARTED)
+				{
+    			//simple_uart_putstring((const uint8_t *)"starting serial\r\n\0");
+					uart_init();
+					SERIAL_STARTED = true;
+				}
+
+			}
 			nrf_delay_ms(1000);
 			//simple_uart_putstring((const uint8_t *)"going now\r\n\0");
 		}
